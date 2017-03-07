@@ -31,7 +31,7 @@ public class CustomEnemy : MonoBehaviour
         rBody.AddForce(direction);
         rBody.velocity = Vector3.ClampMagnitude(rBody.velocity, speed);
 
-        transform.localScale =new Vector3( scale*.6f * (health /maxHealth) + (scale * .4f),scale, scale*.6f * (health / maxHealth) + (scale* .4f));
+        transform.localScale =new Vector3( scale*.6f * (health /maxHealth) + (scale * .4f), scale * .6f * (health / maxHealth) + (scale * .4f), scale*.6f * (health / maxHealth) + (scale* .4f));
 
         if(health<maxHealth)
         {
