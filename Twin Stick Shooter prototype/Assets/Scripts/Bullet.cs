@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rigidBody.AddForce(transform.forward * shootforce);
+        transform.position+=(transform.forward * shootforce * Time.deltaTime);
     }
 
     void OnTriggerEnter(Collider other)
@@ -25,6 +25,10 @@ public class Bullet : MonoBehaviour
         if ((other.gameObject.tag != "Bullet") && (other.gameObject.tag != "Player")) 
         {
             Destroy(this.gameObject);
+        }
+        if(other.gameObject.tag =="Enemy")
+        {
+            other.gameObject.GetComponent<CustomEnemy>().TakeDamage();
         }
     }
 }

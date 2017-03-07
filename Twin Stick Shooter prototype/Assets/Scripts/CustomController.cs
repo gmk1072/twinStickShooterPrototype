@@ -8,17 +8,23 @@ public class CustomController : MonoBehaviour
     public float speed = 5.0f;
     public float fireRate = 1.0f;
 
+    public float maxHealth = 1.0f;
+
+    private float health;
     private Rigidbody rigidBody;
     private float radius = 1.0f;
     private bool shoot;
     private Vector3 direction;
     private float timer;
+    private float speedInit;
 
     // Use this for initialization
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         radius = transform.localScale.x;
+        health = maxHealth;
+        speedInit = speed;
     }
 
     // Update is called once per frame
@@ -30,27 +36,34 @@ public class CustomController : MonoBehaviour
         mousepos = Camera.main.ScreenToWorldPoint(mousepos);
         mousepos.y = transform.position.y;
         Vector3 shootdirection = Vector3.Normalize(mousepos - transform.position);
-        if(Input.GetButton("shoot"))
+        if (Input.GetButton("shoot"))
         {
-            if(timer >= 1/fireRate)
             shoot = true;
         }
         else
         {
             shoot = false;
         }
+        timer += Time.deltaTime;
         if (shoot)
         {
-            Quaternion quat = Quaternion.identity;
-            quat.SetLookRotation(shootdirection, new Vector3(0, 1, 0));
-            Instantiate(bulletPrefab, ((shootdirection * radius) + transform.position), quat);
+            if (timer >= (1 / fireRate))
+            {
+                timer = 0;
+                Quaternion quat = Quaternion.identity;
+                quat.SetLookRotation(shootdirection, new Vector3(0, 1, 0));
+                Instantiate(bulletPrefab, ((shootdirection * radius) + transform.position), quat);
+            }
+
+            speed = speedInit * .6f;
         }
         else
         {
-            timer += Time.deltaTime;
+            speed = speedInit;
+
         }
-        Debug.Log(shoot);
-        if(Input.GetButton("up"))
+
+        if (Input.GetButton("up"))
         {
             transform.position += new Vector3(0, 0, speed * Time.deltaTime);
         }
@@ -66,5 +79,21 @@ public class CustomController : MonoBehaviour
         {
             transform.position += new Vector3(0, 0, -speed * Time.deltaTime);
         }
+
+
+        if(health<=0)
+        {
+            Die();
+        }
+    }
+
+    public void TakeDamage()
+    {
+        health--;
+    }
+
+    void Die()
+    {
+        Destroy(this.gameObject);
     }
 }
