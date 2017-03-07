@@ -12,6 +12,7 @@ public class CustomEnemy : MonoBehaviour
     private float health;
     private GameObject player;
     private float scale;
+    private UIScript uiScript; // ref to UI stuff
 
     // Use this for initialization
     void Start()
@@ -19,6 +20,7 @@ public class CustomEnemy : MonoBehaviour
         rBody = GetComponent<Rigidbody>();
         health = maxHealth;
         player = GameObject.FindGameObjectWithTag("Player");
+        uiScript = FindObjectOfType<UIScript>();
         direction = Vector3.Normalize(player.gameObject.transform.position - transform.position);
         scale = transform.localScale.x;
     }
@@ -50,7 +52,7 @@ public class CustomEnemy : MonoBehaviour
         {
             other.gameObject.GetComponent<CustomController>().TakeDamage();
         }
-        if (other.gameObject.tag != "Bullet")
+        if (player && other.gameObject.tag != "Bullet")
         {
             direction = Vector3.Normalize(player.gameObject.transform.position - transform.position);
         }
@@ -63,6 +65,7 @@ public class CustomEnemy : MonoBehaviour
 
     void Die()
     {
+        uiScript.DecrementEnemies();
         Destroy(this.gameObject);
     }
 }

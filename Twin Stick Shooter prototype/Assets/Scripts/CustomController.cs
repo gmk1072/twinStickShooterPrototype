@@ -17,11 +17,13 @@ public class CustomController : MonoBehaviour
     private Vector3 direction;
     private float timer;
     private float speedInit;
+    private UIScript uiScript; // ref to UI stuff
 
     // Use this for initialization
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        uiScript = FindObjectOfType<UIScript>();
         radius = transform.localScale.x;
         health = maxHealth;
         speedInit = speed;
@@ -94,6 +96,8 @@ public class CustomController : MonoBehaviour
 
     void Die()
     {
+        // Set ui state.
+        uiScript.SetState(UIState.DEAD);
         Destroy(this.gameObject);
     }
 }
